@@ -72,7 +72,7 @@ let checkUserEmail = (userEmail) => {
 let getAllUsers = (userId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let users = "Hoai Son";
+      let users = "";
       if (userId === "ALL") {
         users = await db.User.findAll({
           attributes: { exclude: ["password"] },
