@@ -176,12 +176,6 @@ let updateUserData = (data) => {
         user.address = data.address;
         user.phoneNumber = data.phoneNumber;
         await user.save();
-        // await db.User.save({
-        //   firstName: data.firstName,
-        //   lastName: data.lastName,
-        //   address: data.address,
-        //   phoneNumber: data.phoneNumber,
-        // });
         resolve({
           errCode: 0,
           message: "User updated",
