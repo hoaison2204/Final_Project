@@ -56,14 +56,14 @@ let handleUserLogin = (email, password) => {
   });
 };
 
-let comppareUserPassword = () => {
-  return new Promise((resolve, reject) => {
-    try {
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
+// let comppareUserPassword = () => {
+//   return new Promise((resolve, reject) => {
+//     try {
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
 let checkUserEmail = (userEmail) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -160,6 +160,7 @@ let deleteUser = (userId) => {
 let updateUserData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(data);
       if (!data.id) {
         resolve({
           errCode: 2,
