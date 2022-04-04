@@ -150,7 +150,7 @@ let deleteUser = (userId) => {
       where: { id: userId },
     });
     resolve({
-      reeCode: 0,
+      errCode: 0,
       message: "The user has been deleted",
     });
     resolve();
