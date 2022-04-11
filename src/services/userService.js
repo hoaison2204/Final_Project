@@ -22,7 +22,7 @@ let handleUserLogin = (email, password) => {
       if (isExist) {
         //user already exists
         let user = await db.User.findOne({
-          attributes: ["email", "roleId", "password"],
+          attributes: ["email", "roleId", "password", "firstName", "LastName"],
           where: { email: email },
           raw: true,
         });
@@ -30,7 +30,6 @@ let handleUserLogin = (email, password) => {
         if (user) {
           //compare Password
           let check = await bcrypt.compareSync(password, user.password);
-          // let check = true;
           if (check) {
             userData.errCode = 0;
             userData.errMessage = "OK";
@@ -43,7 +42,7 @@ let handleUserLogin = (email, password) => {
           }
         } else {
           userData.errCode = 2;
-          userData.errMessge = `User's not found~`;
+          userData.errMessage = `User's not found~`;
         }
       } else {
         userData.errCode = 1;
