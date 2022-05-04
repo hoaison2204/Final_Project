@@ -55,13 +55,22 @@ let saveDetailInfoDoctor = (inputData) => {
                 !inputData.doctorId
                 || !inputData.contentHTML
                 || !inputData.contentMarkdown
+                || !inputData.action
+                || !inputData.selectedPrice
+                || !inputData.selectedPayment
+                || !inputData.selectedProvince
+                || !inputData.nameClinic
+                || !inputData.addressClinic
+                || !inputData.note
             ) {
                 resolve({
                     errCode: 1,
-                    errMessage: 'Missing parameter'
+                    errMessage: 'Missing parameter...'
                 })
             }
             else {
+
+                //upset to Markdown
                 if (inputData.action === 'CREATE') {
                     await db.Markdown.create({
                         doctorId: inputData.doctorId,
@@ -83,6 +92,37 @@ let saveDetailInfoDoctor = (inputData) => {
                         doctorMarkdown.description = inputData.description;
                         await doctorMarkdown.save()
                     }
+                }
+
+                // upset to doctor_info table
+                let doctorInfo = await db.Doctor_Info.findOne({
+                    where: {
+                        doctorId: inputData.doctorId,
+                    },
+                    raw: false
+                }
+                )
+                if (doctorInfo) {
+                    //update
+                    doctorInfo.doctorId = inputData.doctorId
+                    doctorInfo.priceId = inputData.selectedPrice;
+                    doctorInfo.provinceId = inputData.selectedProvince;
+                    doctorInfo.paymentId = inputData.selectedPayment;
+                    doctorInfo.nameClinic = inputData.nameClinic;
+                    doctorInfo.addressClinic = inputData.addressClinic;
+                    doctorInfo.note = inputData.note;
+                    await doctorInfo.save()
+                } else {
+                    //create
+                    await db.Doctor_Info.create({
+                        doctorId: inputData.doctorId,
+                        priceId: inputData.selectedPrice,
+                        provinceId: inputData.selectedProvince,
+                        paymentId: inputData.selectedPayment,
+                        nameClinic: inputData.nameClinic,
+                        addressClinic: inputData.addressClinic,
+                        note: inputData.note,
+                    })
                 }
                 resolve({
                     errCode: 0,
@@ -115,7 +155,18 @@ let getDetailDoctorById = (inputId) => {
                             model: db.Markdown,
                             attributes: ['description', 'contentHTML', 'contentMarkdown']
                         },
-                        { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] }
+                        { model: db.Allcode, as: 'positionData', attributes: ['valueEn', 'valueVi'] },
+                        {
+                            model: db.Doctor_Info,
+                            attributes: {
+                                exclude: ['id', 'doctorId']
+                            },
+                            include: [
+                                { model: db.Allcode, as: 'priceTypeData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.Allcode, as: 'provinceTypeData', attributes: ['valueEn', 'valueVi'] },
+                                { model: db.Allcode, as: 'paymentTypeData', attributes: ['valueEn', 'valueVi'] },
+                            ]
+                        }
                     ],
                     raw: false,
                     nest: true
