@@ -94,7 +94,6 @@ let postVerifyBookAppointment = (data) => {
                 }
             }
         } catch (e) {
-
             reject(e)
         }
     })
