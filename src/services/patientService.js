@@ -1,6 +1,6 @@
 import db from "../models/index";
 require('dotenv').config();
-
+import emailService from './emailService'
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -10,6 +10,13 @@ let postBookAppointment = (data) => {
                     errMessage: 'Missing required parameters!'
                 })
             } else {
+                await emailService.sendSimpleEmail({
+                    receiverEmail: data.email,
+                    patientName: 'Patient Hoai Son',
+                    time: '8:00 Sunday',
+                    doctorName: 'Doctor Hoai Son',
+                    redirectLink: 'https://www.google.com'
+                });
                 //upset patient
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },
@@ -39,8 +46,8 @@ let postBookAppointment = (data) => {
                 })
             }
         } catch (e) {
-            console.log(e.message);
-            window.location.href = "https://stackoverflow.com/search?q=[Js]+" + e.message;
+            // console.log(e.message);
+            // window.location.href = "https://stackoverflow.com/search?q=[Js]+" + e.message;
             reject(e);
         }
     })
