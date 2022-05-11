@@ -394,6 +394,9 @@ let getListPatientsForDoctor = (doctorId, date) => {
                                 { model: db.Allcode, as: 'genderData', attributes: ['valueEn', 'valueVi'] }
                             ]
                         },
+                        {
+                            model: db.Allcode, as: 'timeTypeDataPatient', attributes: ['valueEn', 'valueVi']
+                        },
                     ],
                     raw: false,
                     nest: true
@@ -410,6 +413,7 @@ let getListPatientsForDoctor = (doctorId, date) => {
         }
     })
 }
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
