@@ -27,6 +27,32 @@ let sendSimpleEmail = async (dataSend) => {
 
     });
 }
+
+let sendAttachment = async (dataSend) => {
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: process.env.EMAIL_APP_ACCOUNT, // generated ethereal user
+            pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+        },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: '"Test Email...👻" <sonnhgch18710@fpt.edu.vn>', // sender address
+        to: dataSend.email, // list of receivers
+        subject: "Information to book a medical appointment", // Subject line
+        text: "Hello world?", // plain text body
+        html: `<h3>Hello ${dataSend.patientName}!</h3>
+            <p>Bill Information</p>
+            <p>Bill Information</p>
+            `
+    });
+}
 module.exports = {
-    sendSimpleEmail: sendSimpleEmail
+    sendSimpleEmail: sendSimpleEmail,
+    sendAttachment: sendAttachment
 }
